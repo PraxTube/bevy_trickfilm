@@ -15,9 +15,7 @@ fn main() {
     App::new()
         .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest())) // prevents blurry sprites
         .add_plugins(Animation2DPlugin)
-        .add_event::<SampleEvent>()
         .add_animation_event::<SampleEvent>()
-        .register_type::<SampleEvent>()
         .add_systems(Startup, setup)
         .add_systems(
             Update,
