@@ -51,7 +51,9 @@ fn update_animation_event_cache<T: FromReflect>(
             AssetEvent::Added { id }
             | AssetEvent::Modified { id }
             | AssetEvent::LoadedWithDependencies { id } => {
-                let clip = animation_clips.get(*id).unwrap();
+                let Some(clip) = animation_clips.get(*id) else {
+                    continue;
+                };
 
                 let inner_map = clip
                     .events()
