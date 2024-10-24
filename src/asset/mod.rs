@@ -9,6 +9,7 @@ use std::ops::Range;
 
 use ::serde::Deserialize;
 use bevy::{
+    log::warn,
     prelude::{App, Asset, AssetApp, Handle, Plugin},
     reflect::{Reflect, TypePath},
     utils::HashMap,
@@ -167,6 +168,8 @@ impl AnimationClip2D {
                 max_event_frame,
                 keyframes_len,
             ));
+        } else if max_event_frame == keyframes_len {
+            warn!("The last frame of an animation will not trigger any events!");
         }
 
         Ok(Self {
