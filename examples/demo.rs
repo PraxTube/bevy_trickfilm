@@ -8,25 +8,15 @@ mod animation_helper;
 
 use animation_helper::keyboard_animation_control_helper;
 use bevy::prelude::*;
-use bevy_trickfilm::{animation::event::EventTarget, prelude::*};
-use bevy_trickfilm_derive::AnimationEvent;
+use bevy_trickfilm::prelude::*;
 
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest())) // prevents blurry sprites
         .add_plugins(Animation2DPlugin)
-        .add_animation_event::<SampleEvent>()
         .add_systems(Startup, setup)
         .add_systems(Update, (keyboard_animation_control, update_frame_text))
         .run();
-}
-
-#[derive(Debug, Clone, Event, Reflect, AnimationEvent)]
-struct SampleEvent {
-    #[reflect(skip_serializing)]
-    #[target]
-    target: EventTarget,
-    msg: String,
 }
 
 #[derive(Resource)]
@@ -121,9 +111,10 @@ fn update_frame_text(
     };
 
     text.sections[0].value = format!(
-        "current frame: {}\nelapsed: {:.1}\nduration: {}",
+        "current frame: {}\nelapsed: {:.1}\nduration: {}\nframe just changed: {}",
         animation_player.frame(),
         animation_player.elapsed(),
         duration,
+        animation_player.frame_just_changed(),
     );
 }

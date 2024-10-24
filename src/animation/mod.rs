@@ -41,6 +41,7 @@ struct PlayingAnimation2D {
     elapsed: f32,
     duration: Option<f32>,
     frame: usize,
+    previous_frame: Option<usize>,
     seek_time: f32,
     animation_clip: Handle<AnimationClip2D>,
     completions: u32,
@@ -55,6 +56,7 @@ impl Default for PlayingAnimation2D {
             elapsed: 0.0,
             duration: None,
             frame: 0,
+            previous_frame: None,
             seek_time: 0.0,
             animation_clip: Default::default(),
             completions: 0,
@@ -293,5 +295,10 @@ impl AnimationPlayer2D {
     /// Reset the animation to its initial state, as if no time has elapsed.
     pub fn replay(&mut self) {
         self.animation.replay();
+    }
+
+    /// Whether the frame just changed to a new frame.
+    pub fn frame_just_changed(&self) -> bool {
+        Some(self.animation.frame) != self.animation.previous_frame
     }
 }

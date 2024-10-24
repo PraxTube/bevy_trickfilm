@@ -88,11 +88,13 @@ fn collect_events<T: AnimationEvent>(
             if let Some(event_map) = cache.0.get(&animation_player.animation_clip().id()) {
                 // TODO: I need a better way to detect frame changes here
                 // Get all events for this frame transition, if any
-                if let Some(animation_events) = event_map.get(&animation_player.frame()) {
-                    events = animation_events.clone();
-                    events
-                        .iter_mut()
-                        .for_each(|event| event.set_target(EventTarget(entity)));
+                if animation_player.frame_just_changed() {
+                    if let Some(animation_events) = event_map.get(&animation_player.frame()) {
+                        events = animation_events.clone();
+                        events
+                            .iter_mut()
+                            .for_each(|event| event.set_target(EventTarget(entity)));
+                    }
                 }
             }
             (entity, events)
